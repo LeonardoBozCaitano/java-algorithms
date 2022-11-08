@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * The function should return a boolean indicating whether or not it is possible to generate
- * the targetSum using numbers from the array.
+ * the targetWord using strings from the array.
  */
 public class CanConstruct {
 
