@@ -12,7 +12,7 @@ import java.util.List;
  * ('a', 'bac', 'dec')
  * ('a', 'bacd', 'ec')
  */
-public class MinimumStrings {
+public class SubstringsWithoutRepetition {
 
     public static List<String> simple(String string) {
         if (string.isBlank()) return null;
