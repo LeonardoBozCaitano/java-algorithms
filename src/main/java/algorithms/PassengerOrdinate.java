@@ -8,16 +8,14 @@ import java.util.stream.Collectors;
 //
 // You are given an unsorted list of Passengers in the following format
 // class Passenger(
-//   name: String,
-//   bookingReference: String,
-//   loyaltyClass: Int
+//    name: String,
+//    bookingReference: String,
+//    loyaltyClass: Int
 // )
 // Please write a function accepts a flat unsorted list of passengers,
 // and outputs a list of passengers in the correct boarding order.
 
-// The correct boarding order:
-// groups passengers who booked together
-// orders the groups by loyalty class
+// The correct boarding order: orders the groups by loyalty class, but the group enter together with the person with higher loyalty.
 
 public class PassengerOrdinate {
 
@@ -47,9 +45,9 @@ public class PassengerOrdinate {
 
     private static void successOrder() {
         List<Passenger> inputList = new ArrayList<>();
-        inputList.add(new Passenger("Name1 - booked alone on 3st class", "1", 4));
-        inputList.add(new Passenger("Name2 - booked with a partner on 2st class", "2", 3));
-        inputList.add(new Passenger("Name3 - booked with a partner on 2st class", "2", 8));
+        inputList.add(new Passenger("Name1 - booked alone on 4st class", "1", 4));
+        inputList.add(new Passenger("Name2 - booked with a partner on 3st class", "2", 3));
+        inputList.add(new Passenger("Name3 - booked with a partner on 3st class", "2", 8));
 
         inputList.add(new Passenger("Name4 - booked with the job friends on 1st class", "3", 1));
         inputList.add(new Passenger("Name5 - booked with the job friends on 1st class", "3", 2));
@@ -76,10 +74,14 @@ public class PassengerOrdinate {
                 .stream()
                 .collect(Collectors.groupingBy(Passenger::getBooking));
 
-        map.values().stream().sorted(Comparator.comparing(passGroup -> {
-            passGroup.sort(Comparator.comparing(Passenger::getLoyaltyClass));
-            return passGroup.get(0).getLoyaltyClass();
-        })).forEach(orderPassengers::addAll);
+        map.values().stream()
+                .sorted(Comparator.comparing(passGroup -> passGroup.stream()
+                            .min(Comparator.comparing(
+                                    Passenger::getLoyaltyClass
+                            )
+                        ).get().getLoyaltyClass()
+                )
+        ).forEach(orderPassengers::addAll);
 
         return orderPassengers;
     }
